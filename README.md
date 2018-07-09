@@ -6,5 +6,6 @@ The purpose of this script is to:
 3) The uploaded dumps are categorised in two formats, one as a latest.gz file and the other as Timestamp.gz file for ease of access while restoring any dump. We can differentiate between the latest and the older dump files.
 
 Please add a star or write to ankushors789@gmail.com if you like the work done!! 
-Cheers
-Ankush
+
+-Cheers
+---Ankush
