@@ -21,19 +21,23 @@
 ##################################################################################
 
 ###CUSTOM VARIABLES###
-LATEST_TAG="/tmp/Gzip/latestmysql"
+SCRIPT_STATE=$1 #specify script state to either run or stop stop the script
+
+########s3 vars
 SOURCE_BUCKET="s3://ankush-dump-3"
 DESTINATION_BUCKET="s3://ankush-dump-2"
 ACL_POLICY="public-read"
-SCRIPT_STATE="run" #specify script state to either run or stop stop the script
 UPLOAD_BUCKET="s3://ankush-dump-3"
+
+LATEST_TAG="/tmp/Gzip/latestmysql"
+
 MDPath="MongoDumps"
 MD_DB_NAME="ankushKaDb"
 
 DATABASE_NAME="Ankush_Intern_mysql"
 DB_DUMP_PATH="/tmp/Gzip/dump.sql"
-GZIP_DIR="/tmp/Gzip/"
 
+GZIP_DIR="/tmp/Gzip/"
 GZIP_DIR1="/tmp/Gzip1/"
 
 
@@ -121,8 +125,13 @@ progress_bar()
 function syncBuckets(){
 	printf "Syncing $SOURCE_BUCKET and $DESTINATION_BUCKET  now, please wait.......\n"
 	aws s3 sync --acl $ACL_POLICY  $SOURCE_BUCKET $DESTINATION_BUCKET
-	progress_bar 3	
-	printf "sync Successfully done\n"
+	if [ $? -eq 0 ];then
+		progress_bar 3	
+		printf "sync Successfully done\n"
+	else
+ 		echo "Error in syncing...program will terminate"
+ 		exit 1
+	fi
 }
 
 
@@ -141,8 +150,22 @@ function mysqlDumper(){
 		printf "Creating dump from your mysqldb..........................\n"
 		progress_bar 1
 		sudo mysqldump $DATABASE_NAME >$DB_DUMP_PATH
+		if [ $? -eq 0 ];then
+			progress_bar 1	
+			printf "Dump created Successfully\n"
+		else
+ 			echo "Error in Creating dump...program will terminate"
+ 			exit 1
+		fi
+
 		gzip $DB_DUMP_PATH
-		printf "Successfully created .gz file for mysql dump for database $DATABASE_NAME.......................\n" 
+		if [ $? -eq 0 ];then
+			printf "Successfully created .gz file for mysql dump for database $DATABASE_NAME.......................\n" 
+		else
+ 			echo "Error in creating gzip file...program will terminate"
+ 			exit 1
+		fi
+		
 		
 		cp $DB_DUMP_PATH.gz $LATEST_TAG.gz
 		cp $DB_DUMP_PATH.gz $GZIP_DIR$(date -d "today" +"%Y_%m_%d_%H_%M_%S")mysql.gz
@@ -152,12 +175,29 @@ function mysqlDumper(){
 		printf "Beginning Upload for latest.gz and timestamp.gz on bucket $UPLOAD_BUCKET............\n"
 		
 		echo `aws s3 cp $LATEST_TAG.gz $UPLOAD_BUCKET`
-		progress_bar 4
+		if [ $? -eq 0 ];then
+			progress_bar 4	
+		else
+ 			echo "Error in Upload...program will terminate"
+ 			exit 1
+		fi
+
 		echo `aws s3 cp $GZIP_DIR$TIMESTAMPTAG $UPLOAD_BUCKET`
-		progress_bar 4
+		if [ $? -eq 0 ];then
+			progress_bar 4	
+		else
+ 			echo "Error in Upload...program will terminate"
+ 			exit 1
+		fi
+		
 		printf "Finished tasks, bucket at $UPLOAD_BUCKET has following files\n"
-		progress_bar 2
 		aws s3 ls $UPLOAD_BUCKET
+		if [ $? -eq 0 ];then
+			progress_bar 2
+		else
+ 			echo "Error in contacting aws...program will terminate"
+ 			exit 1
+		fi
 
 		printf "Removing Temporary Folder and files......................\n"
 		rm -r /tmp/Gzip/
@@ -178,11 +218,26 @@ function mongodbDumper(){
 		#####################mongoDump dump with hostname and username and port and password for different server backup------------------------
 		#sudo mongodump --host $HOSTNAMEMong --port $PORT --username $USERMong --password $PASSMong --out $MDPath --db $MD_DB_NAME
 		#########################################################################################################################################
-		printf "Creating dump from your mysqldb..........................\n"
+		printf "Creating dump from your mongodb..........................\n"
 		progress_bar 1
 		sudo mongodump -o $MDPath --db $MD_DB_NAME 
+		if [ $? -eq 0 ];then
+			progress_bar 1	
+			printf "Dump created Successfully\n"
+		else
+ 			echo "Error in Creating dump...program will terminate"
+ 			exit 1
+		fi
+
 		tar -zcf $MD_DB_NAME.tar.gz $MDPath
-		
+		if [ $? -eq 0 ];then
+			progress_bar 1	
+			printf "Zipped Successfully.....\n"
+		else
+ 			echo "Error in Creating tar.gz...program will terminate"
+ 			exit 1
+		fi
+
 		cp $MD_DB_NAME.tar.gz /tmp/Gzip1/Latestmongo.tar.gz
 		cp $MD_DB_NAME.tar.gz $GZIP_DIR1$(date -d "today" +"%Y_%m_%d_%H_%M_%S")mongo.tar.gz
 		
@@ -190,12 +245,28 @@ function mongodbDumper(){
 		
 		printf "Beginning Upload for latest.gz and timestamp.gz on bucket $UPLOAD_BUCKET............\n"
 		echo `aws s3 cp /tmp/Gzip1/Latestmongo.tar.gz $UPLOAD_BUCKET`
-		progress_bar 4
+		if [ $? -eq 0 ];then
+			progress_bar 4	
+		else
+ 			echo "Error in Upload...program will terminate"
+ 			exit 1
+		fi
 		echo `aws s3 cp $GZIP_DIR1$TIMESTAMPTAG $UPLOAD_BUCKET`
-		progress_bar 4
+		if [ $? -eq 0 ];then
+			progress_bar 4	
+		else
+ 			echo "Error in Upload...program will terminate"
+ 			exit 1
+		fi
+
 		printf "Finished tasks, bucket at $UPLOAD_BUCKET has following files\n"
 		aws s3 ls $UPLOAD_BUCKET
-		progress_bar 2
+		if [ $? -eq 0 ];then
+			progress_bar 2	
+		else
+ 			echo "Error in Conctacting aws...program will terminate"
+ 			exit 1
+		fi
 
 		printf "Removing Temporary Folder and files......................\n"
 		rm -r /tmp/Gzip1/
@@ -205,11 +276,18 @@ fi
 }
 
 case $SCRIPT_STATE in 
-	"run")
+	"sync")
 		syncBuckets	
+	;;
+	
+	"dumpmysql")
 		mysqlDumper
+	;;
+	 
+	"dumpmongo")
 		mongodbDumper
 	;;
-	 *)
-  	;;
+	*)
+	;;
+	 
 esac
