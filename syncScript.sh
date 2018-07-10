@@ -7,17 +7,17 @@
 
 
 ##Variables to define USERNAME , Hostname and Paswsword for mysql#################
-#HOSTNAME=""
-#USER=""
-#PASS=""
+HOSTNAME_SQL=""
+USER_SQL=""
+PASS_SQL=""
 ##################################################################################
 
 
 ##Variables to define USERNAME , Hostname and Paswsword for mongodb###############
-#HOSTNAMEMong=""
-#USERMong=""
-#PASSMong=""
-#PORT=""
+HOSTNAMEMong=""
+USERMong=""
+PASSMong=""
+PORT=""
 ##################################################################################
 
 ###CUSTOM VARIABLES###
@@ -295,3 +295,80 @@ case $SCRIPT_STATE in
 esac
 
 
+function myvars(){
+	
+	printf "Do you wish to configure default settings for SyncAndDump S3? (press y for yes and n for no): "
+	read Defresponse
+	if [ "$Defresponse" = "y" ] || [ "$Defresponse" = "yes" ] || [ "$Defresponse" = "Y" ] || [ "$Defresponse" = "Yes" ] || [ "$Defresponse" = "YES" ];then
+		printf "Enter the value for Mysql Hostname ($HOSTNAME_SQL):"
+		read host
+		
+		if [ "$host" != NULL ]; then
+		  		HOSTNAME_SQL= $host
+		else
+			continue
+		  	fi  	
+
+
+		printf "Enter the value for Mysql Username ($USER_SQL):"
+		read user
+		
+		if [ "$user" != NULL ]; then
+		  		USER_SQL= $user
+		  	fi  	
+  		
+  		printf "Enter the value for Mysql password ($PASS_SQL):"
+		read pass
+		
+		if [ "$pass" != NULL ]; then
+		  		PASS_SQL= $pass
+		  	fi  	
+
+
+
+
+
+
+
+	else
+		printf "Enter your choice from below: \n1)Press 1 for Syncing Buckets\n2)Press 2 for mysql dump upload\n3)Press 3 for mongodb dump upload\n"
+		read choice
+		case $choice in 
+	"1")
+		syncBuckets	
+	;;
+	
+	"2")
+		mysqlDumper
+	;;
+	 
+	"3")
+		mongodbDumper
+	;;
+	*)
+	;;
+	 
+esac
+	fi
+}
+
+ 
+	while true
+	do
+		myvars
+		printf "Do you wish to continue?(y/n):\n"
+		read choice
+
+		if [ "$choice" = "n" ] || [ "$choice" = "N" ] || [ "$choice" = "no" ] || [ "$choice" = "NO" ] || [ "$choice" = "No" ];then
+			printf "Cya later!\n"
+			exit
+		
+		elif [ "$choice" = "y" ] || [ "$choice" = "Y" ] || [ "$choice" = "yes" ] || [ "$choice" = "YES" ] || [ "$choice" = "Yes" ];then
+			continue
+		
+		else 
+			printf "Wrong choice , program will now terminate...\n"
+			exit
+		fi
+
+	done
