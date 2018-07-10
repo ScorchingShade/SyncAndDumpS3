@@ -22,7 +22,9 @@
 
 ###CUSTOM VARIABLES###
 SCRIPT_STATE=$1 #specify script state to either run or stop stop the script
-
+SQL_PATH="mysqldump"
+MONGO_PATH="mongodump"
+AWS_PATH="aws"
 ########s3 vars
 SOURCE_BUCKET="s3://ankush-dump-3"
 DESTINATION_BUCKET="s3://ankush-dump-2"
@@ -124,7 +126,7 @@ progress_bar()
 ######syncing buckets in s3 with specified policcy
 function syncBuckets(){
 	printf "Syncing $SOURCE_BUCKET and $DESTINATION_BUCKET  now, please wait.......\n"
-	aws s3 sync --acl $ACL_POLICY  $SOURCE_BUCKET $DESTINATION_BUCKET
+	$AWS_PATH s3 sync --acl $ACL_POLICY  $SOURCE_BUCKET $DESTINATION_BUCKET
 	if [ $? -eq 0 ];then
 		progress_bar 3	
 		printf "sync Successfully done\n"
@@ -149,7 +151,7 @@ function mysqlDumper(){
 		
 		printf "Creating dump from your mysqldb..........................\n"
 		progress_bar 1
-		sudo mysqldump $DATABASE_NAME >$DB_DUMP_PATH
+		sudo $SQL_PATH $DATABASE_NAME >$DB_DUMP_PATH
 		if [ $? -eq 0 ];then
 			progress_bar 1	
 			printf "Dump created Successfully\n"
@@ -220,7 +222,7 @@ function mongodbDumper(){
 		#########################################################################################################################################
 		printf "Creating dump from your mongodb..........................\n"
 		progress_bar 1
-		sudo mongodump -o $MDPath --db $MD_DB_NAME 
+		sudo $MONGO_PATH -o $MDPath --db $MD_DB_NAME 
 		if [ $? -eq 0 ];then
 			progress_bar 1	
 			printf "Dump created Successfully\n"
@@ -291,3 +293,5 @@ case $SCRIPT_STATE in
 	;;
 	 
 esac
+
+
