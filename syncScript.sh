@@ -304,115 +304,154 @@ function myvars(){
 		printf "Enter the value for Mysql Hostname ($HOSTNAME_SQL):"
 		read host
 		
-		if [ "$host" != NULL ]; then
-		  		HOSTNAME_SQL= $host
-		else
-			continue
+		if [ "$host" ]; then
+		  		HOSTNAME_SQL=$host
+	
 		  	fi  	
 
 
 		printf "Enter the value for Mysql Username ($USER_SQL):"
 		read user
 		
-		if [ "$user" != NULL ]; then
-		  		USER_SQL= $user
+		if [ "$user" ]; then
+		  		USER_SQL=$user
 		  	fi  	
   		
   		printf "Enter the value for Mysql password ($PASS_SQL):"
 		read pass
 		
-		if [ "$pass" != NULL ]; then
-		  		PASS_SQL= $pass
+		if [ "$pass" ]; then
+		  		PASS_SQL=$pass
 		  	fi  	
 
 		printf "Enter the value for Mongodb Hostname ($HOSTNAMEMong):"  	
 		read hostm
-		if [ "$hostm" != NULL ]; then
-		  		HOSTNAMEMong= $hostm
-		else
-			continue
+		if [ "$hostm" ]; then
+		  		HOSTNAMEMong=$hostm
+	
 		  	fi  	
 
 
 		printf "Enter the value for Mongodb Username ($USERMong):"
 		read userm
 		
-		if [ "$userm" != NULL ]; then
-		  		USERMong= $userm
+		if [ "$userm" ]; then
+		  		USERMong=$userm
 		  	fi  	
   		
   		printf "Enter the value for Mongodb password ($PASSMong):"
 		read passm
 		
-		if [ "$passm" != NULL ]; then
-		  		PASSMong= $passm
+		if [ "$passm" ]; then
+		  		PASSMong=$passm
 		  	fi  	
 	
+	printf "Enter the value for Mongodb port ($PORT):"
+		read port
+		
+		if [ "$port" ]; then
+		  		PORT=$port
+		  	fi  	
+
+	printf "Enter the value for Mongodb path ($MONGO_PATH):"
+		read pathm
+		
+		if [ "$pathm" ]; then
+		  		MONGO_PATH=$pathm
+		  	fi  	
+
+	printf "Enter the value for Mysql path ($SQL_PATH):"
+		read path
+		
+		if [ "$path" ]; then
+		  		SQL_PATH=$path
+		  	fi  	
+
 	printf "Enter the value for aws path ($AWS_PATH):"
 		read patha
 		
-		if [ "$patha" != NULL ]; then
-		  		AWS_PATH= $patha
+		if [ "$patha" ]; then
+		  		AWS_PATH=$patha
 		  	fi  	
 
 	printf "Enter the value for Source bucket ($SOURCE_BUCKET):"
 		read sourceb
 		
-		if [ "$sourceb" != NULL ]; then
-		  		SOURCE_BUCKET= $sourceb
+		if [ "$sourceb" ]; then
+		  		SOURCE_BUCKET=$sourceb
 		  	fi  	
 
 	printf "Enter the value for Destination Bucket ($DESTINATION_BUCKET):"
 		read destb
 		
-		if [ "$destb" != NULL ]; then
-		  		DESTINATION_BUCKET= $destb
+		if [ "$destb" ]; then
+		  		DESTINATION_BUCKET=$destb
 		  	fi  	
 
 
 	printf "Enter the value for ACL Policy ($ACL_POLICY):"
 		read policy
 		
-		if [ "$policy" != NULL ]; then
-		  		ACL_POLICY= $policy
+		if [ "$policy" ]; then
+		  		ACL_POLICY=$policy
 		  	fi  	
 
 	printf "Enter the value for Dump upload bucket ($UPLOAD_BUCKET):"
 		read upBucket
 		
-		if [ "$upBucket" != NULL ]; then
-		  		UPLOAD_BUCKET= $upBucket
+		if [ "$upBucket" ]; then
+		  		UPLOAD_BUCKET=$upBucket
 		  	fi 
 
 	printf "Enter the value for latest mysql dump name ($LATEST_TAG):"
 		read latesttag
 		
-		if [ "$latesttag" != NULL ]; then
-		  		LATEST_TAG= $latesttag
+		if [ "$latesttag" ]; then
+		  		LATEST_TAG=$latesttag
 		  	fi 
 
 	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
 		read latesttagm
 		
-		if [ "$latesttagm" != NULL ]; then
-		  		LATEST_TAG_MONGO= $latesttagm
+		if [ "$latesttagm" ]; then
+		  		LATEST_TAG_MONGO=$latesttagm
 		  	fi 
 
 
 	printf "Enter the value for mongodb database name ($MD_DB_NAME):"
 		read dbnamem
 		
-		if [ "$dbnamem" != NULL ]; then
-		  		MD_DB_NAME= $dbnamem
+		if [ "$dbnamem" ]; then
+		  		MD_DB_NAME=$dbnamem
 		  	fi 
 
 
-	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
-		read latesttagm
+	printf "Enter the value for latest mysql database name ($DATABASE_NAME):"
+		read dbname
 		
-		if [ "$latesttagm" != NULL ]; then
-		  		LATEST_TAG_MONGO= $latesttagm
+		if [ "$dbname" ]; then
+		  		DATABASE_NAME=$dbname
 		  	fi 
+
+
+		  	printf "Enter your choice from below: \n1)Press 1 for Syncing Buckets\n2)Press 2 for mysql dump upload\n3)Press 3 for mongodb dump upload\n"
+		read choice
+		case $choice in 
+	"1")
+		syncBuckets	
+	;;
+	
+	"2")
+		mysqlDumper
+	;;
+	 
+	"3")
+		mongodbDumper
+	;;
+	*)
+	;;
+	 
+esac
 
 
 	else
