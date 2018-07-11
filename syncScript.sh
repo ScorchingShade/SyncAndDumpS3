@@ -453,8 +453,7 @@ function myvars(){
 	 
 esac
 
-
-	else
+elif [ "$Defresponse" = "n" ] || [ "$Defresponse" = "no" ] || [ "$Defresponse" = "N" ] || [ "$Defresponse" = "No" ] || [ "$Defresponse" = "NO" ];then
 		printf "Enter your choice from below: \n1)Press 1 for Syncing Buckets\n2)Press 2 for mysql dump upload\n3)Press 3 for mongodb dump upload\n"
 		read choice
 		case $choice in 
@@ -471,8 +470,12 @@ esac
 	;;
 	*)
 	;;
-	 
+
 esac
+
+
+else 
+	printf  "Wrong choice...\n"
 	fi
 }
 
