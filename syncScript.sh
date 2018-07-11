@@ -297,7 +297,7 @@ esac
 
 
 function myvars(){
-	
+	####Main function to call methods starts here####### DO NOT TOUCH THIS!!! AT ALLL###################
 	printf "Do you wish to configure default settings for SyncAndDump S3 (recommended) ? (press y for yes and n for no): "
 	read Defresponse
 	if [ "$Defresponse" = "y" ] || [ "$Defresponse" = "yes" ] || [ "$Defresponse" = "Y" ] || [ "$Defresponse" = "Yes" ] || [ "$Defresponse" = "YES" ];then
