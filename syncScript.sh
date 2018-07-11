@@ -32,6 +32,7 @@ ACL_POLICY="public-read"
 UPLOAD_BUCKET="s3://ankush-dump-3"
 
 LATEST_TAG="/tmp/Gzip/latestmysql"
+LATEST_TAG_MONGO="/tmp/Gzip1/Latestmongo"
 
 MDPath="MongoDumps"
 MD_DB_NAME="ankushKaDb"
@@ -240,7 +241,7 @@ function mongodbDumper(){
  			exit 1
 		fi
 
-		cp $MD_DB_NAME.tar.gz /tmp/Gzip1/Latestmongo.tar.gz
+		cp $MD_DB_NAME.tar.gz $LATEST_TAG_MONGO.tar.gz
 		cp $MD_DB_NAME.tar.gz $GZIP_DIR1$(date -d "today" +"%Y_%m_%d_%H_%M_%S")mongo.tar.gz
 		
 		TIMESTAMPTAG="$(ls /tmp/Gzip1/|xargs|awk '{print $1}')"
@@ -324,10 +325,94 @@ function myvars(){
 		  		PASS_SQL= $pass
 		  	fi  	
 
+		printf "Enter the value for Mongodb Hostname ($HOSTNAMEMong):"  	
+		read hostm
+		if [ "$hostm" != NULL ]; then
+		  		HOSTNAMEMong= $hostm
+		else
+			continue
+		  	fi  	
 
 
+		printf "Enter the value for Mongodb Username ($USERMong):"
+		read userm
+		
+		if [ "$userm" != NULL ]; then
+		  		USERMong= $userm
+		  	fi  	
+  		
+  		printf "Enter the value for Mongodb password ($PASSMong):"
+		read passm
+		
+		if [ "$passm" != NULL ]; then
+		  		PASSMong= $passm
+		  	fi  	
+	
+	printf "Enter the value for aws path ($AWS_PATH):"
+		read patha
+		
+		if [ "$patha" != NULL ]; then
+		  		AWS_PATH= $patha
+		  	fi  	
+
+	printf "Enter the value for Source bucket ($SOURCE_BUCKET):"
+		read sourceb
+		
+		if [ "$sourceb" != NULL ]; then
+		  		SOURCE_BUCKET= $sourceb
+		  	fi  	
+
+	printf "Enter the value for Destination Bucket ($DESTINATION_BUCKET):"
+		read destb
+		
+		if [ "$destb" != NULL ]; then
+		  		DESTINATION_BUCKET= $destb
+		  	fi  	
 
 
+	printf "Enter the value for ACL Policy ($ACL_POLICY):"
+		read policy
+		
+		if [ "$policy" != NULL ]; then
+		  		ACL_POLICY= $policy
+		  	fi  	
+
+	printf "Enter the value for Dump upload bucket ($UPLOAD_BUCKET):"
+		read upBucket
+		
+		if [ "$upBucket" != NULL ]; then
+		  		UPLOAD_BUCKET= $upBucket
+		  	fi 
+
+	printf "Enter the value for latest mysql dump name ($LATEST_TAG):"
+		read latesttag
+		
+		if [ "$latesttag" != NULL ]; then
+		  		LATEST_TAG= $latesttag
+		  	fi 
+
+	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
+		read latesttagm
+		
+		if [ "$latesttagm" != NULL ]; then
+		  		LATEST_TAG_MONGO= $latesttagm
+		  	fi 
+
+
+	printf "Enter the value for mongodb database name ($MD_DB_NAME):"
+		read dbnamem
+		
+		if [ "$dbnamem" != NULL ]; then
+		  		MD_DB_NAME= $dbnamem
+		  	fi 
+
+
+	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
+		read latesttagm
+		
+		if [ "$latesttagm" != NULL ]; then
+		  		LATEST_TAG_MONGO= $latesttagm
+		  	fi 
 
 
 	else
