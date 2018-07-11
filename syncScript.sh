@@ -147,7 +147,7 @@ function mysqlDumper(){
 		echo $TMP
 		
 		####################mysql dump with hostname and username and password for different server backup------------
-		#sudo mysqldump -h $HOSTNAME -u $USER -p$PASS -B $DATABASE_NAME >$DB_DUMP_PATH
+		#sudo mysqldump -h $HOSTNAME_SQL -u $USER_SQL -p$PASS -B $DATABASE_NAME >$DB_DUMP_PATH
 		##############################################################################################################
 		
 		printf "Creating dump from your mysqldb..........................\n"
@@ -218,11 +218,11 @@ function mongodbDumper(){
 		printf "Switching Directories temporarily to do some work here.....................\n"
 		echo $TMP1
 		
+		printf "Creating dump from your mongodb..........................\n"
+		progress_bar 1
 		#####################mongoDump dump with hostname and username and port and password for different server backup------------------------
 		#sudo mongodump --host $HOSTNAMEMong --port $PORT --username $USERMong --password $PASSMong --out $MDPath --db $MD_DB_NAME
 		#########################################################################################################################################
-		printf "Creating dump from your mongodb..........................\n"
-		progress_bar 1
 		sudo $MONGO_PATH -o $MDPath --db $MD_DB_NAME 
 		if [ $? -eq 0 ];then
 			progress_bar 1	
@@ -298,7 +298,7 @@ esac
 
 function myvars(){
 	
-	printf "Do you wish to configure default settings for SyncAndDump S3? (press y for yes and n for no): "
+	printf "Do you wish to configure default settings for SyncAndDump S3 (recommended) ? (press y for yes and n for no): "
 	read Defresponse
 	if [ "$Defresponse" = "y" ] || [ "$Defresponse" = "yes" ] || [ "$Defresponse" = "Y" ] || [ "$Defresponse" = "Yes" ] || [ "$Defresponse" = "YES" ];then
 		printf "Enter the value for Mysql Hostname ($HOSTNAME_SQL):"
@@ -479,7 +479,8 @@ else
 	fi
 }
 
- 
+ printf "\nWelcome to SyncAndDump s3! A complete solution for automating all your mysql and mongodb backups and uploading them to amazon s3!"
+ printf "\nThis software requires mysql or mongodb installed on your local machine or a server. For further details read the official documentation at:-\n https://github.com/ScorchingShade/SyncAndDumpS3\n Enjoy\n"
 	while true
 	do
 		myvars
