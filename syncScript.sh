@@ -146,12 +146,13 @@ function mysqlDumper(){
 		printf "Switching Directories temporarily to do some work here.....................\n"
 		echo $TMP
 		
-		####################mysql dump with hostname and username and password for different server backup------------
-		#sudo mysqldump -h $HOSTNAME_SQL -u $USER_SQL -p$PASS -B $DATABASE_NAME >$DB_DUMP_PATH
-		##############################################################################################################
+		
 		
 		printf "Creating dump from your mysqldb..........................\n"
 		progress_bar 1
+		####################mysql dump with hostname and username and password for different server backup------------
+		#sudo mysqldump -h $HOSTNAME_SQL -u $USER_SQL -p$PASS -B $DATABASE_NAME >$DB_DUMP_PATH
+		##############################################################################################################
 		sudo $SQL_PATH $DATABASE_NAME >$DB_DUMP_PATH
 		if [ $? -eq 0 ];then
 			progress_bar 1	
@@ -221,7 +222,7 @@ function mongodbDumper(){
 		printf "Creating dump from your mongodb..........................\n"
 		progress_bar 1
 		#####################mongoDump dump with hostname and username and port and password for different server backup------------------------
-		#sudo mongodump --host $HOSTNAMEMong --port $PORT --username $USERMong --password $PASSMong --out $MDPath --db $MD_DB_NAME
+		#sudo $MONGO_PATH --host $HOSTNAMEMong --port $PORT --username $USERMong --password $PASSMong -o $MDPath --db $MD_DB_NAME
 		#########################################################################################################################################
 		sudo $MONGO_PATH -o $MDPath --db $MD_DB_NAME 
 		if [ $? -eq 0 ];then
@@ -297,10 +298,14 @@ esac
 
 
 function myvars(){
-	####Main function to call methods starts here####### DO NOT TOUCH THIS!!! AT ALLL###################
+	#####Main function to call methods starts here####### DO NOT TOUCH THIS!!! AT ALLL####################################
 	printf "Do you wish to configure default settings for SyncAndDump S3 (recommended) ? (press y for yes and n for no): "
 	read Defresponse
 	if [ "$Defresponse" = "y" ] || [ "$Defresponse" = "yes" ] || [ "$Defresponse" = "Y" ] || [ "$Defresponse" = "Yes" ] || [ "$Defresponse" = "YES" ];then
+		printf "Press one for Mysql configurations, press two for mongodb configurations, press 3 for AWS configurations:\n1) MYSQL\n2) Mongodb\n3) AWS\n"
+		read Def2
+		if [ "$Def2" = "1" ];then
+
 		printf "Enter the value for Mysql Hostname ($HOSTNAME_SQL):"
 		read host
 		
@@ -324,7 +329,33 @@ function myvars(){
 		  		PASS_SQL=$pass
 		  	fi  	
 
-		printf "Enter the value for Mongodb Hostname ($HOSTNAMEMong):"  	
+		
+	printf "Enter the value for Mysql path ($SQL_PATH):"
+		read path
+		
+		if [ "$path" ]; then
+		  		SQL_PATH=$path
+		  	fi  	
+
+	printf "Enter the value for latest mysql dump name ($LATEST_TAG):"
+		read latesttag
+		
+		if [ "$latesttag" ]; then
+		  		LATEST_TAG=$latesttag
+		  	fi 		  	
+
+	printf "Enter the value for latest mysql database name ($DATABASE_NAME):"
+		read dbname
+		
+		if [ "$dbname" ]; then
+		  		DATABASE_NAME=$dbname
+		  	fi 
+
+	
+
+	elif [ "$Def2" = "2" ];then
+
+	printf "Enter the value for Mongodb Hostname ($HOSTNAMEMong):"  	
 		read hostm
 		if [ "$hostm" ]; then
 		  		HOSTNAMEMong=$hostm
@@ -359,14 +390,26 @@ function myvars(){
 		if [ "$pathm" ]; then
 		  		MONGO_PATH=$pathm
 		  	fi  	
-
-	printf "Enter the value for Mysql path ($SQL_PATH):"
-		read path
+	  	
+	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
+		read latesttagm
 		
-		if [ "$path" ]; then
-		  		SQL_PATH=$path
-		  	fi  	
+		if [ "$latesttagm" ]; then
+		  		LATEST_TAG_MONGO=$latesttagm
+		  	fi 
 
+
+	printf "Enter the value for mongodb database name ($MD_DB_NAME):"
+		read dbnamem
+		
+		if [ "$dbnamem" ]; then
+		  		MD_DB_NAME=$dbnamem
+		  	fi
+
+	
+
+	elif [ "$Def2" = "3" ];then
+	
 	printf "Enter the value for aws path ($AWS_PATH):"
 		read patha
 		
@@ -403,36 +446,16 @@ function myvars(){
 		  		UPLOAD_BUCKET=$upBucket
 		  	fi 
 
-	printf "Enter the value for latest mysql dump name ($LATEST_TAG):"
-		read latesttag
-		
-		if [ "$latesttag" ]; then
-		  		LATEST_TAG=$latesttag
-		  	fi 
-
-	printf "Enter the value for latest mongodb dump name ($LATEST_TAG_MONGO):"
-		read latesttagm
-		
-		if [ "$latesttagm" ]; then
-		  		LATEST_TAG_MONGO=$latesttagm
-		  	fi 
+    else
+    	
+    	printf "Wrong choice..program will terminate"
+    	exit
 
 
-	printf "Enter the value for mongodb database name ($MD_DB_NAME):"
-		read dbnamem
-		
-		if [ "$dbnamem" ]; then
-		  		MD_DB_NAME=$dbnamem
-		  	fi 
+    fi
 
-
-	printf "Enter the value for latest mysql database name ($DATABASE_NAME):"
-		read dbname
-		
-		if [ "$dbname" ]; then
-		  		DATABASE_NAME=$dbname
-		  	fi 
-
+	
+ 
 
 		  	printf "Enter your choice from below: \n1)Press 1 for Syncing Buckets\n2)Press 2 for mysql dump upload\n3)Press 3 for mongodb dump upload\n"
 		read choice
@@ -448,7 +471,9 @@ function myvars(){
 	"3")
 		mongodbDumper
 	;;
-	*)
+
+	*)printf "No valid input detected" 
+	   continue
 	;;
 	 
 esac
@@ -468,7 +493,8 @@ elif [ "$Defresponse" = "n" ] || [ "$Defresponse" = "no" ] || [ "$Defresponse" =
 	"3")
 		mongodbDumper
 	;;
-	*)
+	*) printf "No valid input detected\n" 
+	   
 	;;
 
 esac
