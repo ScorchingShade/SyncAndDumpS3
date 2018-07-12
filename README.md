@@ -18,7 +18,7 @@ Please do not use for any other purpose other than the ones mentioned.
 Use the following command to install SyncAndDumpS3 on your ubuntu machine-<br>
 `sudo snap install sync-and-dump-s3`
 <br>
-To use the software, use the command-
+To use the software, use the command-<br>
 `sync-and-dump-s3`
 
 ### Add Ons
@@ -30,5 +30,5 @@ vim /snap/sync-and-dump-s3/1/bin/syncScript.sh
 ###### Support more development
 Please add a star or write to ankushors789@gmail.com if you like the work done!! 
 
--Cheers
+-Cheers<br>
 ---Ankush
