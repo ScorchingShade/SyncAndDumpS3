@@ -351,7 +351,19 @@ function myvars(){
 		  		DATABASE_NAME=$dbname
 		  	fi 
 
-	
+	printf "Enter the value for aws path ($AWS_PATH):"
+		read patha
+		
+		if [ "$patha" ]; then
+		  		AWS_PATH=$patha
+		  	fi 
+		  	
+	printf "Enter the value for Dump upload bucket ($UPLOAD_BUCKET):"
+		read upBucket
+		
+		if [ "$upBucket" ]; then
+		  		UPLOAD_BUCKET=$upBucket
+		  	fi 	
 
 	elif [ "$Def2" = "2" ];then
 
@@ -406,6 +418,19 @@ function myvars(){
 		  		MD_DB_NAME=$dbnamem
 		  	fi
 
+	printf "Enter the value for aws path ($AWS_PATH):"
+		read patha
+		
+		if [ "$patha" ]; then
+		  		AWS_PATH=$patha
+		  	fi 
+
+	printf "Enter the value for Dump upload bucket ($UPLOAD_BUCKET):"
+		read upBucket
+		
+		if [ "$upBucket" ]; then
+		  		UPLOAD_BUCKET=$upBucket
+		  	fi 
 	
 
 	elif [ "$Def2" = "3" ];then
@@ -439,12 +464,7 @@ function myvars(){
 		  		ACL_POLICY=$policy
 		  	fi  	
 
-	printf "Enter the value for Dump upload bucket ($UPLOAD_BUCKET):"
-		read upBucket
-		
-		if [ "$upBucket" ]; then
-		  		UPLOAD_BUCKET=$upBucket
-		  	fi 
+
 
     else
     	
