@@ -23,7 +23,7 @@ To use the software, use the command-<br>
 ### Add Ons
 Additional features include support to connect to a db on a server...uncomment the line number 154 and 225 and comment the lines 227 and 156 to include support for contacting a db on external server.
 ##### Command for mods
-vim /snap/sync-and-dump-s3/1/bin/syncScript.sh
+vim /snap/sync-and-dump-s3/#revision-version#/bin/syncScript.sh
 
 
 ###### Support more development
