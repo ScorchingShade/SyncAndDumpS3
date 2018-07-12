@@ -1,17 +1,4 @@
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
 # SyncAndDumpS3
-<a class="github-button"
-   href="{{ link }}"
-   title="{{ title }}"
-   data-icon="{{ octicon }}"
-   data-size="{{ size }}"
-   data-show-count="{{ show count }}"
-   data-text="{{ text }}"
-   aria-label="{{ aria label }}"
-   >{{ text }}</a>
-
 The purpose of this script is to:
 1) Sync two existing s3 buckets
 2) Create a mysql and Mongodb dump file, compress it as .gz and then upload the files to s3 bucket specified as UPLOAD_BUCKET.
