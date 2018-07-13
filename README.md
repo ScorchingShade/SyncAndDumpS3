@@ -13,9 +13,9 @@ Please do not use for any other purpose other than the ones mentioned.
 3) Configuration Options for Environment variables.
 4) Easy to use menu driven , single session programme.
 
-## How To Install!
+## How To Install!(To be available soon)
 Use the following command to install SyncAndDumpS3 on your ubuntu machine-<br>
-`sudo snap install sync-and-dump-s3`
+`sudo snap install --classic sync-and-dump-s3`
 <br>
 To use the software, use the command-<br>
 `sync-and-dump-s3`
