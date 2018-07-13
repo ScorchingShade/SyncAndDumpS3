@@ -20,6 +20,9 @@ Use the following command to install SyncAndDumpS3 on your ubuntu machine-<br>
 To use the software, use the command-<br>
 `sync-and-dump-s3`
 
+Pull the git repo using ssh or http and run the syncScript.sh with appropriate permissions to run directly!
+
+
 ### Add Ons
 Additional features include support to connect to a db on a server...uncomment the line number 154 and 225 and comment the lines 227 and 156 to include support for contacting a db on external server.
 ##### Command for mods
